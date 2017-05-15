@@ -28,135 +28,91 @@
     /// </summary>
     private void InitializeComponent()
     {
-      this.panPlain = new System.Windows.Forms.Panel();
       this.btnEncodeFile = new System.Windows.Forms.Button();
       this.btnPlain = new System.Windows.Forms.Button();
       this.txtPlain = new System.Windows.Forms.TextBox();
-      this.lblPlain = new System.Windows.Forms.Label();
-      this.panCrypted = new System.Windows.Forms.Panel();
       this.btnDecodeFile = new System.Windows.Forms.Button();
       this.btnCrypted = new System.Windows.Forms.Button();
       this.txtCrypted = new System.Windows.Forms.TextBox();
-      this.lblCrypted = new System.Windows.Forms.Label();
       this.panCommon = new System.Windows.Forms.Panel();
       this.txtPassword = new System.Windows.Forms.TextBox();
       this.lblPassword = new System.Windows.Forms.Label();
       this.panTools = new System.Windows.Forms.Panel();
-      this.panPlain.SuspendLayout();
-      this.panCrypted.SuspendLayout();
+      this.panel1 = new System.Windows.Forms.Panel();
+      this.gbxPlain = new System.Windows.Forms.GroupBox();
+      this.gbxCrypted = new System.Windows.Forms.GroupBox();
       this.panCommon.SuspendLayout();
       this.panTools.SuspendLayout();
+      this.panel1.SuspendLayout();
+      this.gbxPlain.SuspendLayout();
+      this.gbxCrypted.SuspendLayout();
       this.SuspendLayout();
-      // 
-      // panPlain
-      // 
-      this.panPlain.Controls.Add(this.btnEncodeFile);
-      this.panPlain.Controls.Add(this.btnPlain);
-      this.panPlain.Controls.Add(this.txtPlain);
-      this.panPlain.Controls.Add(this.lblPlain);
-      this.panPlain.Dock = System.Windows.Forms.DockStyle.Left;
-      this.panPlain.Location = new System.Drawing.Point(0, 0);
-      this.panPlain.Name = "panPlain";
-      this.panPlain.Size = new System.Drawing.Size(396, 331);
-      this.panPlain.TabIndex = 0;
       // 
       // btnEncodeFile
       // 
-      this.btnEncodeFile.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-      this.btnEncodeFile.Location = new System.Drawing.Point(239, 302);
+      this.btnEncodeFile.Location = new System.Drawing.Point(6, 81);
       this.btnEncodeFile.Name = "btnEncodeFile";
-      this.btnEncodeFile.Size = new System.Drawing.Size(70, 23);
+      this.btnEncodeFile.Size = new System.Drawing.Size(35, 23);
       this.btnEncodeFile.TabIndex = 3;
-      this.btnEncodeFile.Text = "Encrypt file";
+      this.btnEncodeFile.Text = "F->";
       this.btnEncodeFile.UseVisualStyleBackColor = true;
       this.btnEncodeFile.Click += new System.EventHandler(this.btnEncodeFile_Click);
       // 
       // btnPlain
       // 
-      this.btnPlain.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-      this.btnPlain.Location = new System.Drawing.Point(163, 302);
+      this.btnPlain.Location = new System.Drawing.Point(6, 6);
       this.btnPlain.Name = "btnPlain";
-      this.btnPlain.Size = new System.Drawing.Size(70, 23);
+      this.btnPlain.Size = new System.Drawing.Size(35, 23);
       this.btnPlain.TabIndex = 2;
-      this.btnPlain.Text = "Encrypt";
+      this.btnPlain.Text = "->";
       this.btnPlain.UseVisualStyleBackColor = true;
       this.btnPlain.Click += new System.EventHandler(this.btnPlain_Click);
       // 
       // txtPlain
       // 
-      this.txtPlain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-      this.txtPlain.Location = new System.Drawing.Point(4, 20);
+      this.txtPlain.AllowDrop = true;
+      this.txtPlain.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.txtPlain.Location = new System.Drawing.Point(3, 16);
       this.txtPlain.Multiline = true;
       this.txtPlain.Name = "txtPlain";
       this.txtPlain.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-      this.txtPlain.Size = new System.Drawing.Size(389, 276);
+      this.txtPlain.Size = new System.Drawing.Size(224, 121);
       this.txtPlain.TabIndex = 1;
-      // 
-      // lblPlain
-      // 
-      this.lblPlain.AutoSize = true;
-      this.lblPlain.Location = new System.Drawing.Point(4, 4);
-      this.lblPlain.Name = "lblPlain";
-      this.lblPlain.Size = new System.Drawing.Size(30, 13);
-      this.lblPlain.TabIndex = 0;
-      this.lblPlain.Text = "Plain";
-      // 
-      // panCrypted
-      // 
-      this.panCrypted.Controls.Add(this.btnDecodeFile);
-      this.panCrypted.Controls.Add(this.btnCrypted);
-      this.panCrypted.Controls.Add(this.txtCrypted);
-      this.panCrypted.Controls.Add(this.lblCrypted);
-      this.panCrypted.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panCrypted.Location = new System.Drawing.Point(396, 0);
-      this.panCrypted.Name = "panCrypted";
-      this.panCrypted.Size = new System.Drawing.Size(396, 331);
-      this.panCrypted.TabIndex = 1;
+      this.txtPlain.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtPlain_DragDrop);
+      this.txtPlain.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtDropTarget_DragEnter);
       // 
       // btnDecodeFile
       // 
-      this.btnDecodeFile.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-      this.btnDecodeFile.Location = new System.Drawing.Point(239, 302);
+      this.btnDecodeFile.Location = new System.Drawing.Point(6, 110);
       this.btnDecodeFile.Name = "btnDecodeFile";
-      this.btnDecodeFile.Size = new System.Drawing.Size(70, 23);
+      this.btnDecodeFile.Size = new System.Drawing.Size(35, 23);
       this.btnDecodeFile.TabIndex = 6;
-      this.btnDecodeFile.Text = "Decrypt file";
+      this.btnDecodeFile.Text = "<-F";
       this.btnDecodeFile.UseVisualStyleBackColor = true;
       this.btnDecodeFile.Click += new System.EventHandler(this.btnDecodeFile_Click);
       // 
       // btnCrypted
       // 
-      this.btnCrypted.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-      this.btnCrypted.Location = new System.Drawing.Point(163, 302);
+      this.btnCrypted.Location = new System.Drawing.Point(6, 35);
       this.btnCrypted.Name = "btnCrypted";
-      this.btnCrypted.Size = new System.Drawing.Size(70, 23);
+      this.btnCrypted.Size = new System.Drawing.Size(35, 23);
       this.btnCrypted.TabIndex = 5;
-      this.btnCrypted.Text = "Decrypt";
+      this.btnCrypted.Text = "<-";
       this.btnCrypted.UseVisualStyleBackColor = true;
       this.btnCrypted.Click += new System.EventHandler(this.btnCrypted_Click);
       // 
       // txtCrypted
       // 
-      this.txtCrypted.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-      this.txtCrypted.Location = new System.Drawing.Point(4, 20);
+      this.txtCrypted.AllowDrop = true;
+      this.txtCrypted.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.txtCrypted.Location = new System.Drawing.Point(3, 16);
       this.txtCrypted.Multiline = true;
       this.txtCrypted.Name = "txtCrypted";
       this.txtCrypted.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-      this.txtCrypted.Size = new System.Drawing.Size(389, 276);
+      this.txtCrypted.Size = new System.Drawing.Size(224, 121);
       this.txtCrypted.TabIndex = 4;
-      // 
-      // lblCrypted
-      // 
-      this.lblCrypted.AutoSize = true;
-      this.lblCrypted.Location = new System.Drawing.Point(4, 4);
-      this.lblCrypted.Name = "lblCrypted";
-      this.lblCrypted.Size = new System.Drawing.Size(43, 13);
-      this.lblCrypted.TabIndex = 3;
-      this.lblCrypted.Text = "Crypted";
+      this.txtCrypted.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtCrypted_DragDrop);
+      this.txtCrypted.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtDropTarget_DragEnter);
       // 
       // panCommon
       // 
@@ -165,7 +121,7 @@
       this.panCommon.Dock = System.Windows.Forms.DockStyle.Top;
       this.panCommon.Location = new System.Drawing.Point(0, 0);
       this.panCommon.Name = "panCommon";
-      this.panCommon.Size = new System.Drawing.Size(792, 38);
+      this.panCommon.Size = new System.Drawing.Size(507, 38);
       this.panCommon.TabIndex = 3;
       // 
       // txtPassword
@@ -175,7 +131,7 @@
       this.txtPassword.Location = new System.Drawing.Point(120, 11);
       this.txtPassword.Name = "txtPassword";
       this.txtPassword.PasswordChar = '*';
-      this.txtPassword.Size = new System.Drawing.Size(669, 20);
+      this.txtPassword.Size = new System.Drawing.Size(384, 20);
       this.txtPassword.TabIndex = 1;
       this.txtPassword.TextChanged += new System.EventHandler(this.txtPassword_TextChanged);
       // 
@@ -190,19 +146,54 @@
       // 
       // panTools
       // 
-      this.panTools.Controls.Add(this.panCrypted);
-      this.panTools.Controls.Add(this.panPlain);
+      this.panTools.Controls.Add(this.gbxCrypted);
+      this.panTools.Controls.Add(this.panel1);
+      this.panTools.Controls.Add(this.gbxPlain);
       this.panTools.Dock = System.Windows.Forms.DockStyle.Fill;
       this.panTools.Location = new System.Drawing.Point(0, 38);
       this.panTools.Name = "panTools";
-      this.panTools.Size = new System.Drawing.Size(792, 331);
+      this.panTools.Size = new System.Drawing.Size(507, 140);
       this.panTools.TabIndex = 3;
+      // 
+      // panel1
+      // 
+      this.panel1.Controls.Add(this.btnDecodeFile);
+      this.panel1.Controls.Add(this.btnEncodeFile);
+      this.panel1.Controls.Add(this.btnPlain);
+      this.panel1.Controls.Add(this.btnCrypted);
+      this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
+      this.panel1.Location = new System.Drawing.Point(230, 0);
+      this.panel1.Name = "panel1";
+      this.panel1.Size = new System.Drawing.Size(47, 140);
+      this.panel1.TabIndex = 7;
+      // 
+      // gbxPlain
+      // 
+      this.gbxPlain.Controls.Add(this.txtPlain);
+      this.gbxPlain.Dock = System.Windows.Forms.DockStyle.Left;
+      this.gbxPlain.Location = new System.Drawing.Point(0, 0);
+      this.gbxPlain.Name = "gbxPlain";
+      this.gbxPlain.Size = new System.Drawing.Size(230, 140);
+      this.gbxPlain.TabIndex = 5;
+      this.gbxPlain.TabStop = false;
+      this.gbxPlain.Text = "Plain";
+      // 
+      // gbxCrypted
+      // 
+      this.gbxCrypted.Controls.Add(this.txtCrypted);
+      this.gbxCrypted.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.gbxCrypted.Location = new System.Drawing.Point(277, 0);
+      this.gbxCrypted.Name = "gbxCrypted";
+      this.gbxCrypted.Size = new System.Drawing.Size(230, 140);
+      this.gbxCrypted.TabIndex = 6;
+      this.gbxCrypted.TabStop = false;
+      this.gbxCrypted.Text = "Crypted";
       // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(792, 369);
+      this.ClientSize = new System.Drawing.Size(507, 178);
       this.Controls.Add(this.panTools);
       this.Controls.Add(this.panCommon);
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -210,33 +201,32 @@
       this.Name = "MainForm";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
       this.Text = "XtzCrypter";
-      this.panPlain.ResumeLayout(false);
-      this.panPlain.PerformLayout();
-      this.panCrypted.ResumeLayout(false);
-      this.panCrypted.PerformLayout();
       this.panCommon.ResumeLayout(false);
       this.panCommon.PerformLayout();
       this.panTools.ResumeLayout(false);
+      this.panel1.ResumeLayout(false);
+      this.gbxPlain.ResumeLayout(false);
+      this.gbxPlain.PerformLayout();
+      this.gbxCrypted.ResumeLayout(false);
+      this.gbxCrypted.PerformLayout();
       this.ResumeLayout(false);
 
     }
 
     #endregion
-
-    private System.Windows.Forms.Panel panPlain;
-    private System.Windows.Forms.Panel panCrypted;
     private System.Windows.Forms.Button btnPlain;
     private System.Windows.Forms.TextBox txtPlain;
-    private System.Windows.Forms.Label lblPlain;
     private System.Windows.Forms.Button btnCrypted;
     private System.Windows.Forms.TextBox txtCrypted;
-    private System.Windows.Forms.Label lblCrypted;
     private System.Windows.Forms.Panel panCommon;
     private System.Windows.Forms.Panel panTools;
     private System.Windows.Forms.TextBox txtPassword;
     private System.Windows.Forms.Label lblPassword;
     private System.Windows.Forms.Button btnEncodeFile;
     private System.Windows.Forms.Button btnDecodeFile;
+    private System.Windows.Forms.GroupBox gbxCrypted;
+    private System.Windows.Forms.Panel panel1;
+    private System.Windows.Forms.GroupBox gbxPlain;
   }
 }
 

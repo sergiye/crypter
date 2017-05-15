@@ -58,7 +58,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RsaCryptoProvider.cs" />
     <Compile Include="StringHelper.cs" />
     <Compile Include="SymmKeyInfo.cs" />
   </ItemGroup>

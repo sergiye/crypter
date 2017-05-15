@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 
 namespace XtzCrypter
 {
-    public class AesCryptoProvider
+    public static class AesCryptoProvider
     {
         private static readonly SymmKeyInfo DefaultKey = new SymmKeyInfo("/twqoenf4qyRKbHgHgNq+7c2PcOfCzGwuN3u3YyajQA="
             , "A9kO6HT2tyKkiuBjhqFFZA==");
@@ -32,7 +32,7 @@ namespace XtzCrypter
             return alg;
         }
 
-        public static SymmetricAlgorithm CreateAlg(string password, byte[] salt, int iterations)
+        private static SymmetricAlgorithm CreateAlg(string password, byte[] salt, int iterations)
         {
             var aes = new RijndaelManaged();
             aes.BlockSize = aes.LegalBlockSizes[0].MaxSize;

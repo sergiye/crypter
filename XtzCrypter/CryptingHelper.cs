@@ -11,9 +11,9 @@ namespace XtzCrypter
 
         public enum HashType
         {
-            Md5,  //24 bytes hash
-            Sha1, //30 bytes hash
-            Sha256 //48 bytes hash
+            Md5,  //32 bytes hash
+            Sha1, //40 bytes hash
+            Sha256 //64 bytes hash
         }
 
         private static HashAlgorithm GetHashAlgorithm(HashType hashType)
@@ -21,8 +21,10 @@ namespace XtzCrypter
             switch (hashType)
             {
                 case HashType.Sha1:
+//                    return new SHA1Cng();
                     return new SHA1Managed();
                 case HashType.Sha256:
+//                    return new SHA256Cng();
                     return new SHA256Managed();
                 //case HashType.Md5:
                 default:
@@ -36,7 +38,17 @@ namespace XtzCrypter
                 return null;
             using (var alg = GetHashAlgorithm(hashType))
             {
-                return BitConverter.ToString(alg.ComputeHash(Encoding.UTF8.GetBytes(input))).Replace("-", "").ToLower();
+                return alg.ComputeHash(Encoding.UTF8.GetBytes(input)).ToBase64();
+            }
+        }
+
+        public static byte[] GetHashBytes(this string input, HashType hashType = HashType.Md5)
+        {
+            if (String.IsNullOrWhiteSpace(input))
+                return null;
+            using (var alg = GetHashAlgorithm(hashType))
+            {
+                return alg.ComputeHash(Encoding.UTF8.GetBytes(input));
             }
         }
 
@@ -45,7 +57,7 @@ namespace XtzCrypter
             if (input == null || input.Length == 0)
                 return null;
             using (var alg = GetHashAlgorithm(hashType))
-                return BitConverter.ToString(alg.ComputeHash(input)).Replace("-", "").ToLower();
+                return alg.ComputeHash(input).ToBase64();
         }
 
         public static string GetFileHash(string filename, HashType hashType = HashType.Md5)
@@ -54,7 +66,7 @@ namespace XtzCrypter
                 return null;
             using (var alg = GetHashAlgorithm(hashType))
             using (var stream = File.OpenRead(filename))
-                return BitConverter.ToString(alg.ComputeHash(stream)).Replace("-", "").ToLower();
+                return alg.ComputeHash(stream).ToBase64();
         }
 
         #endregion Hash
@@ -84,5 +96,17 @@ namespace XtzCrypter
         }
 
         #endregion basic crypting
+
+        public static SymmKeyInfo GetKey(string password)
+        {
+            if (string.IsNullOrWhiteSpace(password)) return null;
+            var passData = password.GetHashBytes(HashType.Sha256);
+            var keyData = new byte[24];
+            var ivData = new byte[16];
+            Buffer.BlockCopy(passData, 0, keyData, 0, keyData.Length);
+            Buffer.BlockCopy(passData, passData.Length - ivData.Length, ivData, 0, ivData.Length);
+            var key = new SymmKeyInfo(keyData.ToBase64(), ivData.ToBase64());
+            return key;
+        }
     }
 }
