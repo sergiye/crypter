@@ -40,6 +40,14 @@ namespace XtzCrypter
             return string.IsNullOrWhiteSpace(input) ? input : input.Substring(0, 1).ToUpper() + input.Substring(1);
         }
 
+        public static string Reverse(this string input)
+        {
+            if (string.IsNullOrEmpty(input)) return input;
+            var charArray = input.ToCharArray();
+            Array.Reverse(charArray);
+            return new string(charArray);
+        }
+
         public static string StrValue(this DateTime value)
         {
             return value == DateTime.MinValue ? "" : value.ToString("g");

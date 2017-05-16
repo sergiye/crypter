@@ -133,7 +133,6 @@
       this.txtPassword.PasswordChar = '*';
       this.txtPassword.Size = new System.Drawing.Size(384, 20);
       this.txtPassword.TabIndex = 1;
-      this.txtPassword.TextChanged += new System.EventHandler(this.txtPassword_TextChanged);
       // 
       // lblPassword
       // 

@@ -8,29 +8,22 @@ namespace XtzCrypter
 {
   public partial class MainForm : Form
   {
-    private static string _appFileExt = ".xtz";
-
     public MainForm()
     {
       InitializeComponent();
       Icon = Icon.ExtractAssociatedIcon(Process.GetCurrentProcess().MainModule.FileName);
     }
 
-    private void txtPassword_TextChanged(object sender, EventArgs e)
+      private void btnPlain_Click(object sender, EventArgs e)
     {
-      //lblStrength.Text = txtPassword.Text;
-    }
-
-    private void btnPlain_Click(object sender, EventArgs e)
-    {
-      txtCrypted.Text = txtPlain.Text.Encrypt(CryptingHelper.GetKey(txtPassword.Text));
+      txtCrypted.Text = txtPlain.Text.Encrypt(AesCryptoProvider.GetKey(txtPassword.Text));
     }
 
     private void btnCrypted_Click(object sender, EventArgs e)
     {
       try
       {
-        txtPlain.Text = txtCrypted.Text.Decrypt(CryptingHelper.GetKey(txtPassword.Text));
+        txtPlain.Text = txtCrypted.Text.Decrypt(AesCryptoProvider.GetKey(txtPassword.Text));
       }
       catch (Exception)
       {
@@ -56,9 +49,7 @@ namespace XtzCrypter
                 {
                   CheckFileExists = true,
                   Multiselect = false,
-                  RestoreDirectory = true,
-                  DefaultExt = _appFileExt,
-                  Filter = "Encrypted files (*.xtz)|*.xtz"
+                  RestoreDirectory = true
                 };
       if (dlg.ShowDialog() != DialogResult.OK) return;
       DecryptFile(txtPassword.Text, dlg.FileName);
@@ -90,8 +81,7 @@ namespace XtzCrypter
         MessageBox.Show("Its a directory");
         return;
       }
-      var destFile = srcFile + _appFileExt;
-      AesCryptoProvider.EncryptFile(CryptingHelper.GetKey(password), srcFile, destFile);
+      AesCryptoProvider.EncryptFile(AesCryptoProvider.GetKey(password), srcFile);
       MessageBox.Show("Encrypted file created", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
@@ -102,15 +92,9 @@ namespace XtzCrypter
         MessageBox.Show("Its a directory");
         return;
       }
-      if (!srcFile.EndsWith(_appFileExt))
-      {
-        MessageBox.Show(string.Format("File '{0}' is not valid encrypted data", srcFile), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        return;
-      }
-      var destFile = srcFile.Substring(0, srcFile.LastIndexOf(_appFileExt, StringComparison.OrdinalIgnoreCase));
       try
       {
-        AesCryptoProvider.DecryptFile(CryptingHelper.GetKey(password), srcFile, destFile);
+        AesCryptoProvider.DecryptFile(AesCryptoProvider.GetKey(password), srcFile);
         MessageBox.Show("Decrypted file created", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
       }
       catch (Exception)

@@ -96,17 +96,5 @@ namespace XtzCrypter
         }
 
         #endregion basic crypting
-
-        public static SymmKeyInfo GetKey(string password)
-        {
-            if (string.IsNullOrWhiteSpace(password)) return null;
-            var passData = password.GetHashBytes(HashType.Sha256);
-            var keyData = new byte[24];
-            var ivData = new byte[16];
-            Buffer.BlockCopy(passData, 0, keyData, 0, keyData.Length);
-            Buffer.BlockCopy(passData, passData.Length - ivData.Length, ivData, 0, ivData.Length);
-            var key = new SymmKeyInfo(keyData.ToBase64(), ivData.ToBase64());
-            return key;
-        }
     }
 }
