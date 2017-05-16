@@ -69,7 +69,7 @@ namespace XtzCrypter
             if (string.IsNullOrWhiteSpace(toEncrypt))
                 return null;
             using (var alg = CreateAlg(key))
-            using (var encryptor = alg.CreateEncryptor(alg.Key, alg.IV))
+            using (var encryptor = alg.CreateEncryptor())
             using (var msEncrypt = new MemoryStream())
             {
                 using (var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
@@ -89,7 +89,7 @@ namespace XtzCrypter
             if (toDecrypt == null || toDecrypt.Length == 0)
                 return null;
             using (var alg = CreateAlg(key))
-            using (var decryptor = alg.CreateDecryptor(alg.Key, alg.IV))
+            using (var decryptor = alg.CreateDecryptor())
             using (var msDecrypt = new MemoryStream(toDecrypt))
             using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
             using (var srDecrypt = new StreamReader(csDecrypt))
@@ -100,34 +100,56 @@ namespace XtzCrypter
         {
             if (!File.Exists(sourceFilename))
                 throw new FileNotFoundException(sourceFilename);
-            var dstFile = string.IsNullOrWhiteSpace(destinationFilename) ? Path.GetTempFileName() : destinationFilename;
+            var attributes = File.GetAttributes(sourceFilename);
+            var creationTime = File.GetCreationTime(sourceFilename);
+            var writeTime = File.GetLastWriteTime(sourceFilename);
+            var accessTime = File.GetLastAccessTime(sourceFilename);
+            if (string.IsNullOrWhiteSpace(destinationFilename))
+                destinationFilename = sourceFilename;
             using (var alg = CreateAlg(key))
-            using (var encryptor = alg.CreateEncryptor(alg.Key, alg.IV))
-            using (var destination = new FileStream(dstFile, FileMode.Create, FileAccess.Write, FileShare.None))
-            using (var cryptoStream = new CryptoStream(destination, encryptor, CryptoStreamMode.Write))
-            using (var source = new FileStream(sourceFilename, FileMode.Open, FileAccess.Read, FileShare.Read))
-                source.CopyTo(cryptoStream);
-            if (!string.IsNullOrWhiteSpace(destinationFilename)) return;
-            File.Delete(sourceFilename);
-            File.Move(dstFile, sourceFilename);
+            using (var encryptor = alg.CreateEncryptor())
+            using (var memoryStream = new MemoryStream())
+            using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
+            {
+                using (var source = new FileStream(sourceFilename, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    source.CopyTo(cryptoStream);
+                cryptoStream.FlushFinalBlock();
+                memoryStream.Position = 0;
+                using (var destination = new FileStream(destinationFilename, FileMode.Create, FileAccess.Write, FileShare.None))
+                    memoryStream.CopyTo(destination);
+            }
+            File.SetAttributes(destinationFilename, attributes);
+            File.SetCreationTime(destinationFilename, creationTime);
+            File.SetLastAccessTime(destinationFilename, accessTime);
+            File.SetLastWriteTime(destinationFilename, writeTime);
         }
 
         public static void DecryptFile(SymmKeyInfo key, string sourceFilename, string destinationFilename = null)
         {
             if (!File.Exists(sourceFilename))
                 throw new FileNotFoundException(sourceFilename);
-            var dstFile = string.IsNullOrWhiteSpace(destinationFilename) ? Path.GetTempFileName() : destinationFilename;
+            var attributes = File.GetAttributes(sourceFilename);
+            var creationTime = File.GetCreationTime(sourceFilename);
+            var writeTime = File.GetLastWriteTime(sourceFilename);
+            var accessTime = File.GetLastAccessTime(sourceFilename);
+            if (string.IsNullOrWhiteSpace(destinationFilename))
+                destinationFilename = sourceFilename;
             using (var alg = CreateAlg(key))
             using (var decryptor = alg.CreateDecryptor(alg.Key, alg.IV))
-            using (var destination = new FileStream(dstFile, FileMode.Create, FileAccess.Write, FileShare.None))
-            using (var cryptoStream = new CryptoStream(destination, decryptor, CryptoStreamMode.Write))
+            using (var memoryStream = new MemoryStream())
+            using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Write))
             {
                 using (var source = new FileStream(sourceFilename, FileMode.Open, FileAccess.Read, FileShare.Read))
                     source.CopyTo(cryptoStream);
+                cryptoStream.FlushFinalBlock();
+                memoryStream.Position = 0;
+                using (var destination = new FileStream(destinationFilename, FileMode.Create, FileAccess.Write, FileShare.None))
+                    memoryStream.CopyTo(destination);
             }
-            if (!string.IsNullOrWhiteSpace(destinationFilename)) return;
-            File.Delete(sourceFilename);
-            File.Move(dstFile, sourceFilename);
+            File.SetAttributes(destinationFilename, attributes);
+            File.SetCreationTime(destinationFilename, creationTime);
+            File.SetLastAccessTime(destinationFilename, accessTime);
+            File.SetLastWriteTime(destinationFilename, writeTime);
         }
 
         #endregion basic crypting
