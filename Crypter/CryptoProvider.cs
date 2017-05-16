@@ -1,10 +1,12 @@
 using System.IO;
 using System.Security.Cryptography;
 
-namespace XtzCrypter
+namespace Crypter
 {
     public static class CryptoProvider
     {
+        private static long _memoryFileLimit = 524288000; //500 Mb
+
         private static SymmetricAlgorithm CreateAlg(SymmKeyInfo key = null)
         {
             var alg = new RijndaelManaged
@@ -104,6 +106,59 @@ namespace XtzCrypter
             var creationTime = File.GetCreationTime(sourceFilename);
             var writeTime = File.GetLastWriteTime(sourceFilename);
             var accessTime = File.GetLastAccessTime(sourceFilename);
+            var dstFile = string.IsNullOrWhiteSpace(destinationFilename) ? Path.GetTempFileName() : destinationFilename;
+            using (var alg = CreateAlg(key))
+            using (var encryptor = alg.CreateEncryptor())
+            using (var destination = new FileStream(dstFile, FileMode.Create, FileAccess.Write, FileShare.None))
+            using (var cryptoStream = new CryptoStream(destination, encryptor, CryptoStreamMode.Write))
+            using (var source = new FileStream(sourceFilename, FileMode.Open, FileAccess.Read, FileShare.Read))
+                source.CopyTo(cryptoStream);
+            File.SetAttributes(dstFile, attributes);
+            File.SetCreationTime(dstFile, creationTime);
+            File.SetLastAccessTime(dstFile, accessTime);
+            File.SetLastWriteTime(dstFile, writeTime);
+            if (!string.IsNullOrWhiteSpace(destinationFilename)) return;
+            File.Delete(sourceFilename);
+            File.Move(dstFile, sourceFilename);
+        }
+
+        public static void DecryptFile(SymmKeyInfo key, string sourceFilename, string destinationFilename = null)
+        {
+            if (!File.Exists(sourceFilename))
+                throw new FileNotFoundException(sourceFilename);
+            var attributes = File.GetAttributes(sourceFilename);
+            var creationTime = File.GetCreationTime(sourceFilename);
+            var writeTime = File.GetLastWriteTime(sourceFilename);
+            var accessTime = File.GetLastAccessTime(sourceFilename);
+            var dstFile = string.IsNullOrWhiteSpace(destinationFilename) ? Path.GetTempFileName() : destinationFilename;
+            using (var alg = CreateAlg(key))
+            using (var decryptor = alg.CreateDecryptor())
+            using (var destination = new FileStream(dstFile, FileMode.Create, FileAccess.Write, FileShare.None))
+            using (var cryptoStream = new CryptoStream(destination, decryptor, CryptoStreamMode.Write))
+            {
+                using (var source = new FileStream(sourceFilename, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    source.CopyTo(cryptoStream);
+            }
+            File.SetAttributes(dstFile, attributes);
+            File.SetCreationTime(dstFile, creationTime);
+            File.SetLastAccessTime(dstFile, accessTime);
+            File.SetLastWriteTime(dstFile, writeTime);
+            if (!string.IsNullOrWhiteSpace(destinationFilename)) return;
+            File.Delete(sourceFilename);
+            File.Move(dstFile, sourceFilename);
+        }
+
+        public static void EncryptFileMem(SymmKeyInfo key, string sourceFilename, string destinationFilename = null)
+        {
+            if (!File.Exists(sourceFilename))
+                throw new FileNotFoundException(sourceFilename);
+            if (new FileInfo(sourceFilename).Length > _memoryFileLimit)
+                throw new FileLoadException("File is too big", sourceFilename);
+
+            var attributes = File.GetAttributes(sourceFilename);
+            var creationTime = File.GetCreationTime(sourceFilename);
+            var writeTime = File.GetLastWriteTime(sourceFilename);
+            var accessTime = File.GetLastAccessTime(sourceFilename);
             if (string.IsNullOrWhiteSpace(destinationFilename))
                 destinationFilename = sourceFilename;
             using (var alg = CreateAlg(key))
@@ -124,10 +179,13 @@ namespace XtzCrypter
             File.SetLastWriteTime(destinationFilename, writeTime);
         }
 
-        public static void DecryptFile(SymmKeyInfo key, string sourceFilename, string destinationFilename = null)
+        public static void DecryptFileMem(SymmKeyInfo key, string sourceFilename, string destinationFilename = null)
         {
             if (!File.Exists(sourceFilename))
                 throw new FileNotFoundException(sourceFilename);
+            if (new FileInfo(sourceFilename).Length > _memoryFileLimit)
+                throw new FileLoadException("File is too big", sourceFilename);
+
             var attributes = File.GetAttributes(sourceFilename);
             var creationTime = File.GetCreationTime(sourceFilename);
             var writeTime = File.GetLastWriteTime(sourceFilename);
@@ -135,7 +193,7 @@ namespace XtzCrypter
             if (string.IsNullOrWhiteSpace(destinationFilename))
                 destinationFilename = sourceFilename;
             using (var alg = CreateAlg(key))
-            using (var decryptor = alg.CreateDecryptor(alg.Key, alg.IV))
+            using (var decryptor = alg.CreateDecryptor())
             using (var memoryStream = new MemoryStream())
             using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Write))
             {

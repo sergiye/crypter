@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
+using Crypter;
 
 namespace XtzCrypter
 {
@@ -86,8 +87,15 @@ namespace XtzCrypter
                 MessageBox.Show("Its a directory");
                 return;
             }
-            CryptoProvider.EncryptFile(CurrentKey, srcFile);
-            MessageBox.Show("Encrypted file created", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            try
+            {
+                CryptoProvider.EncryptFileMem(CurrentKey, srcFile);
+                MessageBox.Show("Encrypted file created", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error encrypting file: " + ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void DecryptFile(string srcFile)
@@ -99,12 +107,12 @@ namespace XtzCrypter
             }
             try
             {
-                CryptoProvider.DecryptFile(CurrentKey, srcFile);
+                CryptoProvider.DecryptFileMem(CurrentKey, srcFile);
                 MessageBox.Show("Decrypted file created", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error decrypting data", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Error decrypting file: " + ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
     }

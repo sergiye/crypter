@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace XtzCrypter
+namespace Crypter
 {
     public static class StringHelper
     {

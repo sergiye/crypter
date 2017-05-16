@@ -2,7 +2,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace XtzCrypter
+namespace Crypter
 {
     public static class HashHelper
     {

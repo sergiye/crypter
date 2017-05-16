@@ -1,4 +1,4 @@
-namespace XtzCrypter
+namespace Crypter
 {
     public class SymmKeyInfo
     {
