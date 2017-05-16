@@ -1,14 +1,11 @@
-using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace XtzCrypter
 {
-    public static class CryptingHelper
+    public static class HashHelper
     {
-        #region Hash
-
         public enum HashType
         {
             Md5,  //32 bytes hash
@@ -44,7 +41,7 @@ namespace XtzCrypter
 
         public static byte[] GetHashBytes(this string input, HashType hashType = HashType.Md5)
         {
-            if (String.IsNullOrWhiteSpace(input))
+            if (string.IsNullOrWhiteSpace(input))
                 return null;
             using (var alg = GetHashAlgorithm(hashType))
             {
@@ -68,33 +65,5 @@ namespace XtzCrypter
             using (var stream = File.OpenRead(filename))
                 return alg.ComputeHash(stream).ToBase64();
         }
-
-        #endregion Hash
-
-        #region basic crypting
-
-        public static byte[] EncryptString(string clearText, SymmKeyInfo key = null)
-        {
-            return AesCryptoProvider.Encrypt(clearText, key);
-        }
-
-        public static string DecryptString(byte[] encrypted, SymmKeyInfo key = null)
-        {
-            return AesCryptoProvider.Decrypt(encrypted, key);
-        }
-
-        public static string Encrypt(this string value, SymmKeyInfo key = null)
-        {
-            return EncryptString(value, key).ToBase64();
-        }
-
-        public static string Decrypt(this string value, SymmKeyInfo key = null)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-                return null;
-            return DecryptString(value.FromBase64Bytes(), key);
-        }
-
-        #endregion basic crypting
     }
 }

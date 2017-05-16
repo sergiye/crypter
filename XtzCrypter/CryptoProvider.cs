@@ -1,10 +1,9 @@
-using System;
 using System.IO;
 using System.Security.Cryptography;
 
 namespace XtzCrypter
 {
-    public static class AesCryptoProvider
+    public static class CryptoProvider
     {
         private static SymmetricAlgorithm CreateAlg(SymmKeyInfo key = null)
         {
@@ -48,19 +47,26 @@ namespace XtzCrypter
 
         public static SymmKeyInfo GetKey(string password, byte[] salt = null, int iterations = 1)
         {
+            if (string.IsNullOrWhiteSpace(password)) return null;
             if (salt != null)
                 using (var alg = CreateAlg(password, salt, iterations))
                     return new SymmKeyInfo(alg.Key, alg.IV);
-            if (string.IsNullOrWhiteSpace(password)) return null;
-            var keyData = password.GetHashBytes(CryptingHelper.HashType.Sha256);
-            var ivData = password.Reverse().GetHashBytes(CryptingHelper.HashType.Sha256);
+            var keyData = password.GetHashBytes(HashHelper.HashType.Sha256);
+            var ivData = password.Reverse().GetHashBytes(HashHelper.HashType.Sha256);
             var key = new SymmKeyInfo(keyData, ivData);
             return key;
         }
 
-        public static byte[] Encrypt(string toEncrypt, SymmKeyInfo key)
+        #region basic crypting
+
+        public static string Encrypt(this string value, SymmKeyInfo key = null)
         {
-            if (String.IsNullOrWhiteSpace(toEncrypt))
+            return EncryptString(value, key).ToBase64();
+        }
+
+        private static byte[] EncryptString(string toEncrypt, SymmKeyInfo key = null)
+        {
+            if (string.IsNullOrWhiteSpace(toEncrypt))
                 return null;
             using (var alg = CreateAlg(key))
             using (var encryptor = alg.CreateEncryptor(alg.Key, alg.IV))
@@ -73,7 +79,12 @@ namespace XtzCrypter
             }
         }
 
-        public static string Decrypt(byte[] toDecrypt, SymmKeyInfo key)
+        public static string Decrypt(this string value, SymmKeyInfo key = null)
+        {
+            return string.IsNullOrWhiteSpace(value) ? null : DecryptString(value.FromBase64Bytes(), key);
+        }
+
+        private static string DecryptString(byte[] toDecrypt, SymmKeyInfo key = null)
         {
             if (toDecrypt == null || toDecrypt.Length == 0)
                 return null;
@@ -118,5 +129,7 @@ namespace XtzCrypter
             File.Delete(sourceFilename);
             File.Move(dstFile, sourceFilename);
         }
+
+        #endregion basic crypting
     }
 }

@@ -48,8 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AesCryptoProvider.cs" />
-    <Compile Include="CryptingHelper.cs" />
+    <Compile Include="CryptoProvider.cs" />
+    <Compile Include="HashHelper.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
