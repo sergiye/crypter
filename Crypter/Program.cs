@@ -10,16 +10,17 @@ namespace Crypter
         private static void ShowHelpText(Assembly asm)
         {
             Console.WriteLine();
-            Console.WriteLine(asm.GetName().Name + " -t <some text> [-p 'some password'] [-d] [-w]");
+            Console.WriteLine(asm.GetName().Name + " -t <some text> [-p 'some password or ? symbol'] [-d] [-w]");
             Console.WriteLine();
-            Console.WriteLine("-t <some text>: text to convert");
-            Console.WriteLine("-p <password>: password to use as key for crypting");
-            Console.WriteLine("-src <sourceFile>: source file or files mask (ex: *.txt) or path to *.txt files");
-            Console.WriteLine("-r: process files in subfolders (work with -a key)");
-            //Console.WriteLine("-a: all files in app folder");
-
             Console.WriteLine("-d: decrypt input data (otherwise encrypt is used by default)");
+            Console.WriteLine("-p <password/?>: password for crypting or '?' symbol to be asked for password later");
+            
+            Console.WriteLine("-t <some text>: text to convert");
+
+            Console.WriteLine("-src <sourceFile>: source file or files mask (ex: *.txt) or path to *.txt files");
+            Console.WriteLine("-r: process files in subfolders (work with -src key)");
             Console.WriteLine("-m: process file(s) in memory (with size limits)");
+            //Console.WriteLine("-a: all files in app folder");
 
             Console.WriteLine("-w: wait for key press on finish");
             Console.WriteLine();
