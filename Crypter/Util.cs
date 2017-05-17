@@ -7,15 +7,36 @@ namespace Crypter
 {
     internal static class Util
     {
+        internal static ConsoleColor ErrorColor = ConsoleColor.Red;
+        internal static ConsoleColor SuccessColor = ConsoleColor.Green;
+
+        internal static void WriteLine(string message = null, ConsoleColor color = ConsoleColor.White, ConsoleColor backColor = ConsoleColor.Black)
+        {
+            Write(message, color, backColor, true);
+        }
+
+        internal static void Write(string message = null, ConsoleColor color = ConsoleColor.White, ConsoleColor backColor = ConsoleColor.Black, bool newLine = false)
+        {
+            if (backColor != ConsoleColor.Black)
+                Console.BackgroundColor = backColor;
+            if (backColor != ConsoleColor.White)
+                Console.ForegroundColor = color;
+            if (newLine)
+                Console.WriteLine(message);
+            else
+                Console.Write(message);
+            Console.ResetColor();
+        }
+
         internal static void ShowMainInfo(Assembly asm)
         {
-            Console.WriteLine();
+            WriteLine();
             var ver = asm.GetName().Version;
-            Console.WriteLine(asm.GetName().Name + " Version: " + ver.ToString(3) + "; Build time: " + GetBuildTime(ver).ToString("yyyy/MM/dd HH:mm:ss"));
+            WriteLine(asm.GetName().Name + " Version: " + ver.ToString(3) + "; Build time: " + GetBuildTime(ver).ToString("yyyy/MM/dd HH:mm:ss"));
             var title = GetAttribute<AssemblyTitleAttribute>(asm);
             if (title != null)
-                Console.WriteLine(title.Title);
-            Console.WriteLine();
+                WriteLine(title.Title);
+            WriteLine();
         }
 
         private static T GetAttribute<T>(ICustomAttributeProvider assembly, bool inherit = false) where T : Attribute
