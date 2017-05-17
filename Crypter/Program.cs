@@ -20,7 +20,6 @@ namespace Crypter
             Console.WriteLine("-src <sourceFile>: source file or files mask (ex: *.txt) or path to *.txt files");
             Console.WriteLine("-r: process files in subfolders (work with -src key)");
             Console.WriteLine("-m: process file(s) in memory (with size limits)");
-            //Console.WriteLine("-a: all files in app folder");
 
             Console.WriteLine("-w: wait for key press on finish");
             Console.WriteLine();
@@ -31,7 +30,6 @@ namespace Crypter
         {
             var startedTime = DateTime.Now;
 
-            //const string allFilesMask = "*.*";
             var wait = false;
             var recursive = false;
             var encrypt = true;
@@ -96,9 +94,6 @@ namespace Crypter
 //                                    return;
 //                                }
                                 break;
-//                            case "-a":
-//                                srcFile = allFilesMask;
-//                                break;
                             case "-r":
                                 recursive = true;
                                 break;
@@ -145,13 +140,15 @@ namespace Crypter
                 }
                 if (!string.IsNullOrEmpty(srcFile))
                 {
+                    if ((File.GetAttributes(srcFile) & FileAttributes.Directory) == FileAttributes.Directory)
+                        srcFile = srcFile + "/*.*";
+                    else
+                        recursive = false;
                     var workPath = Path.GetDirectoryName(srcFile);
                     if (string.IsNullOrEmpty(workPath))
                         workPath = Util.GetAppPath();
                     else
                         srcFile = Path.GetFileName(srcFile);
-//                    if (string.IsNullOrEmpty(srcFile))
-//                        srcFile = allFilesMask;
                     Util.ProcessFolder(workPath, srcFile, recursive, filePath => ProcessFile(filePath, encrypt, key, memory));
                 }
             }
