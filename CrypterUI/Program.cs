@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace XtzCrypter
+namespace CrypterUI
 {
   static class Program
   {

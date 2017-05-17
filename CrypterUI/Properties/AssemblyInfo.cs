@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("XtzCrypter")]
+[assembly: AssemblyTitle("CrypterUI")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Sergiy Yegoshyn")]
-[assembly: AssemblyProduct("XtzCrypter")]
+[assembly: AssemblyProduct("CrypterUI")]
 [assembly: AssemblyCopyright("Copyright © Sergiy Yegoshyn 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

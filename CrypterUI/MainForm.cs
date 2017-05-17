@@ -5,7 +5,7 @@ using System.IO;
 using System.Windows.Forms;
 using Crypter;
 
-namespace XtzCrypter
+namespace CrypterUI
 {
     public partial class MainForm : Form
     {

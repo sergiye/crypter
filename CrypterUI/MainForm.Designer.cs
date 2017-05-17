@@ -1,4 +1,4 @@
-﻿namespace XtzCrypter
+﻿namespace CrypterUI
 {
   partial class MainForm
   {
@@ -199,7 +199,7 @@
       this.MaximizeBox = false;
       this.Name = "MainForm";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-      this.Text = "XtzCrypter";
+      this.Text = "CrypterUI";
       this.panCommon.ResumeLayout(false);
       this.panCommon.PerformLayout();
       this.panTools.ResumeLayout(false);
