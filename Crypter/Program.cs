@@ -67,14 +67,14 @@ namespace Crypter
                             case "-p":
                                 if (args.Length > j + 1)
                                 {
-                                    password = args[j + 1];
+                                    password = args[j + 1].Trim().Trim('\'');
                                     j++;
                                 }
                                 break;
                             case "-t":
                                 if (args.Length > j + 1)
                                 {
-                                    srcText = args[j + 1];
+                                    srcText = args[j + 1].Trim().Trim('\'');
                                     j++;
                                 }
                                 if (string.IsNullOrEmpty(srcText))
@@ -110,6 +110,33 @@ namespace Crypter
                     Console.WriteLine("No input data passed");
                     return;
                 }
+
+                if (password.StartsWith("?"))
+                {
+                    password = string.Empty;
+                    Console.Write("Enter your password: ");
+                    ConsoleKeyInfo keyInfo;
+                    do
+                    {
+                        keyInfo = Console.ReadKey(true);
+                        if (keyInfo.Key != ConsoleKey.Backspace && keyInfo.Key != ConsoleKey.Enter)
+                        {
+                            password += keyInfo.KeyChar;
+                            Console.Write("*");
+                        }
+                        else
+                        {
+                            if (keyInfo.Key != ConsoleKey.Backspace || password.Length <= 0) continue;
+                            password = password.Substring(0, (password.Length - 1));
+                            Console.Write("\b \b");
+                        }
+                    }
+                    while (keyInfo.Key != ConsoleKey.Enter);
+                    Console.WriteLine();
+                }
+                if (Debugger.IsAttached)
+                    Console.WriteLine("The Password You entered is : " + password);
+
                 var key = CryptoProvider.GetKey(password);
                 if (!string.IsNullOrEmpty(srcText))
                 {

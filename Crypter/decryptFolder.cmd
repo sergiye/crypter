@@ -1,4 +1,4 @@
 @ECHO OFF
 set srcfolder=%~1
-Crypter.exe -src "%srcfolder%\*.*" -r -m -p 'password' -d
+Crypter.exe -src "%srcfolder%\*.*" -r -m -p ? -d
 pause
