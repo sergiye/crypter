@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Crypter
 {
-    class Program
+    static class Program
     {
         private static void ShowHelpText(Assembly asm)
         {
@@ -124,9 +124,9 @@ namespace Crypter
                     }
                     while (keyInfo.Key != ConsoleKey.Enter);
                     Util.WriteLine();
+                    if (Debugger.IsAttached)
+                        Util.WriteLine("The Password You entered is : " + password);
                 }
-                if (Debugger.IsAttached)
-                    Util.WriteLine("The Password You entered is : " + password);
 
                 Util.WriteLine();
                 var key = CryptoProvider.GetKey(password);
@@ -134,19 +134,25 @@ namespace Crypter
                 {
                     Util.WriteLine(encrypt ? srcText.Encrypt(key) : srcText.Decrypt(key), Util.SuccessColor);
                 }
-                if (!string.IsNullOrEmpty(srcFile))
+                if (string.IsNullOrEmpty(srcFile)) return;
+                if (!Util.IsFileNameCorrect(srcFile))
+                {
+                    Util.WriteLine("Invalid -src parameter passed", Util.ErrorColor);
+                    return;
+                }
+                if (!Util.IsFileMaskUsed(srcFile))
                 {
                     if ((File.GetAttributes(srcFile) & FileAttributes.Directory) == FileAttributes.Directory)
                         srcFile = srcFile + "/*.*";
                     else
                         recursive = false;
-                    var workPath = Path.GetDirectoryName(srcFile);
-                    if (string.IsNullOrEmpty(workPath))
-                        workPath = Util.GetAppPath();
-                    else
-                        srcFile = Path.GetFileName(srcFile);
-                    Util.ProcessFolder(workPath, srcFile, recursive, filePath => ProcessFile(filePath, encrypt, key, memory));
                 }
+                var workPath = Path.GetDirectoryName(srcFile);
+                if (string.IsNullOrEmpty(workPath))
+                    workPath = Util.GetAppPath();
+                else
+                    srcFile = Path.GetFileName(srcFile);
+                Util.ProcessFolder(workPath, srcFile, recursive, filePath => ProcessFile(filePath, encrypt, key, memory));
             }
             catch (Exception ex)
             {

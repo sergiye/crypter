@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace Crypter
@@ -54,6 +55,16 @@ namespace Crypter
             if (TimeZone.IsDaylightSavingTime(DateTime.Now, TimeZone.CurrentTimeZone.GetDaylightChanges(DateTime.Now.Year)))
                 buildTime = buildTime.AddHours(1);
             return buildTime;
+        }
+
+        internal static bool IsFileNameCorrect(string fileName)
+        {
+            return fileName.Any(f => Path.GetInvalidFileNameChars().Contains(f) || Path.GetInvalidPathChars().Contains(f));
+        }
+
+        internal static bool IsFileMaskUsed(string fileName)
+        {
+            return fileName.Any(f => new [] {'?', '*'}.Contains(f));
         }
 
         internal static string GetAppPath()
