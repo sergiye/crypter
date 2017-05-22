@@ -220,6 +220,51 @@ namespace HGBase.Common {
                      return key;
               }
 
+    #region TripleDES Crypting
+
+    private static readonly byte[] AesKey = "63P5RtO7BZU+jhjD3tQbO8qU2ab486vb".FromBase64Bytes();
+    private static readonly byte[] AesIV = "MZRNmm5AHcM=".FromBase64Bytes();
+
+    public static byte[] EncryptTripleDES(this string plainText, byte[] key = null, byte[] iv = null)
+    {
+      if (string.IsNullOrWhiteSpace(plainText))
+        return null;
+      byte[] encrypted;
+      using (var alg = new TripleDESCryptoServiceProvider())
+      {
+        alg.Key = key == null || key.Length <= 0 ? AesKey : key;
+        alg.IV = iv == null || iv.Length <= 0 ? AesIV : iv;
+        var encryptor = alg.CreateEncryptor(alg.Key, alg.IV);
+        using (var msEncrypt = new MemoryStream())
+        using (var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+        {
+          using (var swEncrypt = new StreamWriter(csEncrypt))
+            swEncrypt.Write(plainText);
+          encrypted = msEncrypt.ToArray();
+        }
+      }
+      return encrypted;
+    }
+
+    public static string DecryptTripleDES(this byte[] cipherText, byte[] key = null, byte[] iv = null)
+    {
+      if (cipherText == null || cipherText.Length <= 0)
+        return null;
+      string plaintext;
+      using (var alg = new TripleDESCryptoServiceProvider())
+      {
+        alg.Key = key == null || key.Length <= 0 ? AesKey : key;
+        alg.IV = iv == null || iv.Length <= 0 ? AesIV : iv;
+        var decryptor = alg.CreateDecryptor(alg.Key, alg.IV);
+        using (var msDecrypt = new MemoryStream(cipherText))
+        using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+        using (var srDecrypt = new StreamReader(csDecrypt))
+          plaintext = srDecrypt.ReadToEnd();
+      }
+      return plaintext;
+    }
+
+    #endregion
 
        }
 }
