@@ -13,7 +13,7 @@ namespace Crypter
             Util.WriteLine(asm.GetName().Name + " -t <some text> [-p 'some password or ? symbol'] [-d] [-w]");
             Util.WriteLine();
             Util.WriteLine("-d: decrypt input data (otherwise encrypt is used by default)");
-            Util.WriteLine("-p <password/?>: password for crypting or '?' symbol to be asked for password later");
+            Util.WriteLine("-p <password/?>: password for encrypting or '?' symbol to be asked for password later");
 
             Util.WriteLine("-t <some text>: text to convert");
 
@@ -69,6 +69,7 @@ namespace Crypter
                                     password = args[j + 1].Trim().Trim('\'');
                                     j++;
                                 }
+
                                 break;
                             case "-t":
                                 if (args.Length > j + 1)
@@ -76,11 +77,13 @@ namespace Crypter
                                     srcText = args[j + 1].Trim().Trim('\'');
                                     j++;
                                 }
+
                                 if (string.IsNullOrEmpty(srcText))
                                 {
                                     Util.WriteLine("Empty '-t' parameter", Util.ErrorColor);
                                     return;
                                 }
+
                                 break;
                             case "-src":
                                 if (args.Length > j + 1)
@@ -88,6 +91,7 @@ namespace Crypter
                                     srcFile = args[j + 1].Trim().Trim('\'');
                                     j++;
                                 }
+
                                 break;
                             case "-r":
                                 recursive = true;
@@ -121,8 +125,8 @@ namespace Crypter
                             password = password.Substring(0, (password.Length - 1));
                             Util.Write("\b \b");
                         }
-                    }
-                    while (keyInfo.Key != ConsoleKey.Enter);
+                    } while (keyInfo.Key != ConsoleKey.Enter);
+
                     Util.WriteLine();
                     if (Debugger.IsAttached)
                         Util.WriteLine("The Password You entered is : " + password);
@@ -134,12 +138,14 @@ namespace Crypter
                 {
                     Util.WriteLine(encrypt ? srcText.Encrypt(key) : srcText.Decrypt(key), Util.SuccessColor);
                 }
+
                 if (string.IsNullOrEmpty(srcFile)) return;
                 if (!Util.IsFileNameCorrect(srcFile))
                 {
                     Util.WriteLine("Invalid -src parameter passed", Util.ErrorColor);
                     return;
                 }
+
                 if (!Util.IsFileMaskUsed(srcFile))
                 {
                     if ((File.GetAttributes(srcFile) & FileAttributes.Directory) == FileAttributes.Directory)
@@ -147,12 +153,14 @@ namespace Crypter
                     else
                         recursive = false;
                 }
+
                 var workPath = Path.GetDirectoryName(srcFile);
                 if (string.IsNullOrEmpty(workPath))
                     workPath = Util.GetAppPath();
                 else
                     srcFile = Path.GetFileName(srcFile);
-                Util.ProcessFolder(workPath, srcFile, recursive, filePath => ProcessFile(filePath, encrypt, key, memory));
+                Util.ProcessFolder(workPath, srcFile, recursive,
+                    filePath => ProcessFile(filePath, encrypt, key, memory));
             }
             catch (Exception ex)
             {
@@ -162,13 +170,13 @@ namespace Crypter
             {
                 var timeWasted = DateTime.Now - startedTime;
                 Util.WriteLine();
-                Util.WriteLine(string.Format("Time wasted: {0:G}", timeWasted));
+                Util.WriteLine($"Time wasted: {timeWasted:G}");
                 if (wait || Debugger.IsAttached)
                 {
                     Util.WriteLine();
                     Util.WriteLine("Press any key to continue...");
                     Console.ReadKey();
-                 }
+                }
             }
         }
 
@@ -182,7 +190,7 @@ namespace Crypter
                         CryptoProvider.EncryptFileMem(key, filePath);
                     else
                         CryptoProvider.EncryptFile(key, filePath);
-                    Util.WriteLine(string.Format("Encrypted - {0}", filePath), Util.SuccessColor);
+                    Util.WriteLine($"Encrypted - {filePath}", Util.SuccessColor);
                 }
                 else
                 {
@@ -190,12 +198,12 @@ namespace Crypter
                         CryptoProvider.DecryptFileMem(key, filePath);
                     else
                         CryptoProvider.DecryptFile(key, filePath);
-                    Util.WriteLine(string.Format("Decrypted - {0}", filePath), Util.SuccessColor);
+                    Util.WriteLine($"Decrypted - {filePath}", Util.SuccessColor);
                 }
             }
             catch (Exception ex)
             {
-                Util.WriteLine(string.Format("Error processing {0} - {1}", filePath, ex.Message), Util.ErrorColor);
+                Util.WriteLine($"Error processing {filePath} - {ex.Message}", Util.ErrorColor);
             }
         }
     }

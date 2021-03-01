@@ -15,10 +15,7 @@ namespace CrypterUI
             Icon = Icon.ExtractAssociatedIcon(Process.GetCurrentProcess().MainModule.FileName);
         }
 
-        private SymmKeyInfo CurrentKey
-        {
-            get { return CryptoProvider.GetKey(txtPassword.Text); }
-        }
+        private SymmKeyInfo CurrentKey => CryptoProvider.GetKey(txtPassword.Text);
 
         private void btnPlain_Click(object sender, EventArgs e)
         {
