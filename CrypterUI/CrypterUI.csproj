@@ -8,9 +8,10 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>CrypterUI</RootNamespace>
     <AssemblyName>CrypterUI</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -48,6 +49,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Crypter\CryptoProvider.cs">
+      <Link>CryptoProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Crypter\HashHelper.cs">
+      <Link>HashHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Crypter\StringHelper.cs">
+      <Link>StringHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Crypter\SymmKeyInfo.cs">
+      <Link>SymmKeyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Crypter\Util.cs">
+      <Link>Util.cs</Link>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,12 +80,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Crypter\Crypter.csproj">
-      <Project>{D02E87ED-954D-42A6-9919-D4BC9CD4D478}</Project>
-      <Name>Crypter</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
